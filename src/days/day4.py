@@ -12,8 +12,21 @@ Grid = list[list[str]]
 def main():
     lines = list(map(str.strip, open_data_file_as_lines(DATA_FILE)))
     grid = list(map(list, lines))
-    print(count_forklift_accessible_rolls(grid))
+    rolls_marked = stage_roll_removal(grid)
+    rolls_removed = 0
+    print(rolls_marked)
+    while(rolls_marked):
+        remove_rolls(grid)
+        rolls_removed += rolls_marked
+        rolls_marked = stage_roll_removal(grid)
+    print(rolls_removed)
     
+def remove_rolls(grid: Grid) -> None:
+    for row in range(len(grid)):
+        for col in range(len(grid[row])):
+            if grid[row][col] == MARKED_ROLL:
+                grid[row][col] = EMPTY_FLOOR
+
 
 def get_neighbors(grid: Grid, row: int, col: int) -> list[str]:
     neighbors = []
@@ -24,41 +37,21 @@ def get_neighbors(grid: Grid, row: int, col: int) -> list[str]:
                 neighbors += neighbor
     return neighbors
 
-def count_forklift_accessible_rolls(grid: Grid):
-    count = 0
+def stage_roll_removal(grid: Grid) -> int:
+    rolls_staged = 0
     for row in range(len(grid)):
         for col in range(len(grid[row])):
             neighbors = get_neighbors(grid, row, col)
-            if neighbors.count(PAPER_ROLL) < 4 and grid[row][col] == PAPER_ROLL:
-                count += 1
-    return count
+            if neighbors.count(PAPER_ROLL) + neighbors.count(MARKED_ROLL) < 4 and grid[row][col] == PAPER_ROLL:
+                grid[row][col] = MARKED_ROLL
+                rolls_staged += 1
+    return rolls_staged
+
 
 def safe_grid_get(grid: Grid, row: int, col: int, default="") -> str:
     if (0 <= row < len(grid)) and (0 <= col < len(grid[row])):
         return grid[row][col] 
     return default
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
