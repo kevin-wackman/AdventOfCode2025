@@ -1,4 +1,5 @@
 from util.filehandling import open_data_file_as_lines
+from util.grid import Grid, safe_grid_get
 
 DATA_FILE = "day4in.txt"
 
@@ -6,8 +7,6 @@ DATA_FILE = "day4in.txt"
 EMPTY_FLOOR = '.'
 PAPER_ROLL = '@'
 MARKED_ROLL = 'x'
-
-Grid = list[list[str]]
 
 def main():
     lines = list(map(str.strip, open_data_file_as_lines(DATA_FILE)))
@@ -46,14 +45,6 @@ def stage_roll_removal(grid: Grid) -> int:
                 grid[row][col] = MARKED_ROLL
                 rolls_staged += 1
     return rolls_staged
-
-
-def safe_grid_get(grid: Grid, row: int, col: int, default="") -> str:
-    if (0 <= row < len(grid)) and (0 <= col < len(grid[row])):
-        return grid[row][col] 
-    return default
-
-
 
 
 main()
