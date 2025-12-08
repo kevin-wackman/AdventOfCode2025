@@ -41,6 +41,12 @@ class MultiRange:
             elif start <= num and end >= num:
                 return True
         return False
+    
+    def total_breadth(self) -> int:
+        breadth = 0
+        for (start, end) in self.ranges_list:
+            breadth += end - start + 1
+        return breadth
 
 
 def main():
@@ -57,6 +63,7 @@ def main():
             value_lines.append(line)
     ranges = MultiRange(range_lines)
     print(check_fresh_values(ranges, value_lines))
+    print(ranges.total_breadth())
 
 def check_fresh_values(ranges: MultiRange, value_lines: list[str]) -> int:
     fresh_values = 0
